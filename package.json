@@ -1,0 +1,31 @@
+{
+  "name": "backendapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renatobh83/backendapi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/renatobh83/backendapi/issues"
+  },
+  "homepage": "https://github.com/renatobh83/backendapi#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "http-status": "^1.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.8.1"
+  }
+}
