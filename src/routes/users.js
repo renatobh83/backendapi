@@ -1,10 +1,10 @@
 const usersController = require("../app/controller/usersController");
-const verifyToken = require("../app/auth/checkToken");
+const verifyToken = require("../middlewares/checkToken");
 const users = require("express").Router();
 
-users.get("/users", verifyToken, usersController.getall);
-users.post("/users", verifyToken, usersController.createUser);
-users.get("/users/:name", verifyToken, usersController.findByName);
-users.put("/users/:update", verifyToken, usersController.updateUser);
-users.delete("/users/:name", verifyToken, usersController.delelteUser);
+users.get("/users", usersController.getall);
+users.post("/users", usersController.createUser);
+users.get("/users/:name", usersController.findByName);
+users.put("/users/:email", usersController.updateUser);
+users.delete("/users/:email", usersController.delelteUser);
 module.exports = users;

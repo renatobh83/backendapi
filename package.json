@@ -26,7 +26,9 @@
     "express": "^4.17.1",
     "http-status": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.8.1"
+    "jwks-rsa": "^1.8.1",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.20"
   },
   "devDependencies": {
     "heroku": "^7.42.1"

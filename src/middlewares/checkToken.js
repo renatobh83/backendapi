@@ -1,7 +1,7 @@
+require("dotenv").config();
 const jwksRsa = require("jwks-rsa");
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv").config();
-const { erroResponse } = require("../response");
+const { erroResponse } = require("../app/response");
 
 const client = jwksRsa({
   jwksUri: process.env.URI,
