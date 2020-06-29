@@ -1,6 +1,6 @@
-const response = require("../response");
+const { defaultResponse, erroResponse } = require("../response");
 
-class IndexController {
+class indexController {
   async getToken(req, res) {
     const HeaderToken = req.headers.authorization;
     if (HeaderToken) {
@@ -10,11 +10,11 @@ class IndexController {
           httpOnly: true,
           expires: new Date(Date.now() + 900000),
         })
-        .send(response.defaultResponse("Token storaged"));
+        .send(defaultResponse("Token storaged"));
     } else {
-      res.send(response.erroResponse("Token is not found"));
+      res.send(erroResponse("Token is not found"));
     }
   }
 }
 
-module.exports = new IndexController();
+module.exports = new indexController();
