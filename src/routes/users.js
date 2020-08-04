@@ -1,10 +1,23 @@
 const usersController = require("../app/controller/usersController");
 const verifyToken = require("../middlewares/checkToken");
+const { eAdmin } = require("../middlewares/eAdmin");
+
 const users = require("express").Router();
 
-users.get("/users", usersController.getall);
-users.post("/users", usersController.createUser);
-users.get("/users/:name", usersController.findByName);
-users.put("/users/:email", usersController.updateUser);
-users.delete("/users/:email", usersController.delelteUser);
+users.get("/api/pacientes", usersController.indexPacientes);
+users.get("/api/users", usersController.indexUsers);
+users.get("/api/users/:email", usersController.getUserByEmail);
+
+users.get("/api/users/inativos", usersController.getAllInactive);
+
+users.post("/api/users", usersController.findOrCreate);
+users.put("/api/users/:email", usersController.updateUser);
+
+users.delete("/api/users", usersController.delete);
+users.delete("/api/users/restoring", usersController.restoring);
+
+users.use(function (user, req, res, next) {
+  console.log(user);
+  res.status(200).send(user);
+});
 module.exports = users;

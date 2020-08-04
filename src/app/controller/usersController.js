@@ -1,70 +1,101 @@
 const { erroResponse, defaultResponse } = require("../response");
 const Users = require("../models/Users");
+const Grupos = require("../models/Grupos");
+const httpStatus = require("http-status");
 
-class usersController {
-  async getall(req, res) {
+class UsersController {
+  //Get all patients
+  async indexPacientes(req, res) {
     try {
-      const users = await Users.find();
-      res.json(defaultResponse(users));
+      const pacientes = await Users.find({
+        $and: [{ ativo: true }, { paciente: true }],
+      });
+      res.send(defaultResponse(pacientes));
     } catch (error) {
       res.send(erroResponse(error.message));
     }
   }
-  async createUser(req, res) {
+  // Get all Users
+  async indexUsers(req, res) {
     try {
-      const { name, email } = req.body;
+      const users = await Users.find({
+        $or: [{ paciente: false }, { paciente: null }],
+        $and: [{ ativo: true }],
+      });
+      res.send(defaultResponse(users));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+  async getUserByEmail(req, res) {
+    try {
+      const users = await Users.findOne(req.params);
+      res.send(defaultResponse(users));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+  // Get user/Patient inactive
+  async getAllInactive(req, res) {
+    try {
+      const users = await Users.find({
+        $and: [{ ativo: false }],
+      });
+      res.send(defaultResponse(users));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+  // create a Patient/Users
+  async findOrCreate(req, res) {
+    const { email, group, nome, username } = req.body;
+    const dataCreate = req.body;
+    try {
       const userExist = await Users.findOne({ email: email });
-
-      if (userExist) {
-        res.send(erroResponse("Usuario ja cadastrado", 409));
-      } else {
-        const newUser = await Users.create({
-          name,
-          email,
-        });
-        res.send(defaultResponse(newUser, 201));
-      }
+      if (userExist) return res.send(defaultResponse(userExist));
+      const { _id: newUser, ...user } = await Users.create(dataCreate);
+      const g = await Grupos.findById(group);
+      g.userId.push(newUser);
+      await g.save();
+      res.send(defaultResponse(user, httpStatus.CREATED));
     } catch (error) {
       res.send(erroResponse(error.message));
     }
   }
 
-  async findByName(req, res) {
-    try {
-      const { name } = req.params;
-      const userExist = await Users.findOne({ name });
-      if (!userExist) {
-        res.send(erroResponse(`User: ${name} not found`, 404));
-      } else {
-        res.send(defaultResponse(userExist));
-      }
-    } catch (error) {
-      res.send(erroResponse(error.message));
-    }
-  }
+  //Update patient/users
   async updateUser(req, res) {
     try {
       const { email } = req.params;
-      const { name } = req.body;
-      const update = await Users.updateOne({ email }, { $set: { name } });
-      res.send(defaultResponse(update));
+      const update = await Users.updateOne({ email }, { $set: req.body });
+      res.send(defaultResponse(update.nModified, httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
     }
   }
-  async delelteUser(req, res) {
+
+  // inactive Patient/users
+  async delete(req, res) {
     try {
-      const { email } = req.params;
-      const users = await Users.deleteOne({ email });
-      if (users.deletedCount !== 0) {
-        res.send(defaultResponse("User Deleted", 204));
-      } else {
-        res.send(defaultResponse("User not found", 404));
-      }
+      const response = await Users.updateOne(req.query, {
+        $set: { ativo: false },
+      });
+      res.send(defaultResponse(response.nModified, httpStatus.NO_CONTENT));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+  // Restoring patient/users
+  async restoring(req, res) {
+    try {
+      const response = await Users.updateOne(req.query, {
+        $set: { ativo: true },
+      });
+      res.send(defaultResponse(response.nModified, httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
     }
   }
 }
 
-module.exports = new usersController();
+module.exports = new UsersController();

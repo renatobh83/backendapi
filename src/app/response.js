@@ -1,8 +1,8 @@
 const httpStatus = require("http-status");
 
 class Response {
-  defaultResponse = (data, statusCode = httpStatus.OK) => ({
-    data,
+  defaultResponse = (message, statusCode = httpStatus.OK) => ({
+    message,
     statusCode,
   });
   erroResponse = (message, statusCode = httpStatus.BAD_REQUEST) => ({

@@ -14,7 +14,10 @@ class AppController {
     this.express.use(cookieParser());
     this.express.use(express.json());
     this.express.use(
-      cors({ origin: "http://localhost:3000", credentials: true })
+      cors({
+        origin: ["http://192.168.1.226:3000", "http://localhost:3000"],
+        credentials: true,
+      })
     );
   }
   routes() {
