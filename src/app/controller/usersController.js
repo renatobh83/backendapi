@@ -29,8 +29,9 @@ class UsersController {
   }
   async getUserByEmail(req, res) {
     try {
-      const users = await Users.findOne(req.params);
-      res.send(defaultResponse(users));
+      const user = await Users.findOne(req.params, { password: 0 });
+
+      res.send(defaultResponse(user));
     } catch (error) {
       res.send(erroResponse(error.message));
     }
@@ -48,17 +49,23 @@ class UsersController {
   }
   // create a Patient/Users
   async findOrCreate(req, res) {
-    const { email, group, nome, username } = req.body;
+    const { email, group } = req.body;
     const dataCreate = req.body;
     try {
       const userExist = await Users.findOne({ email: email });
-      if (userExist) return res.send(defaultResponse(userExist));
+      if (userExist) {
+        //  await Users.updateOne({ email: email }, { $set: dataCreate });
+        return res.send(defaultResponse(userExist));
+      }
       const { _id: newUser, ...user } = await Users.create(dataCreate);
-      const g = await Grupos.findById(group);
-      g.userId.push(newUser);
-      await g.save();
+      if (group) {
+        const g = await Grupos.findById(group);
+        g.userId.push(newUser);
+        await g.save();
+      }
       res.send(defaultResponse(user, httpStatus.CREATED));
     } catch (error) {
+      console.log(error);
       res.send(erroResponse(error.message));
     }
   }
