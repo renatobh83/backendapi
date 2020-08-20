@@ -8,12 +8,6 @@ const GruposSchema = new mongoose.Schema({
     uppercase: true,
     trim: true,
   },
-  userId: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
   isAdmin: {
     type: Boolean,
     default: false,

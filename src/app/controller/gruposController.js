@@ -20,6 +20,14 @@ class GrupoController {
       res.send(erroResponse(error));
     }
   }
+  async getName(req, res) {
+    try {
+      const grupo = await Grupos.findById(req.params, { _id: 0, nome: 1 });
+      res.send(defaultResponse(grupo));
+    } catch (error) {
+      res.send(erroResponse(error));
+    }
+  }
   // novo grupo
   async store(req, res) {
     const { nome } = req.body;

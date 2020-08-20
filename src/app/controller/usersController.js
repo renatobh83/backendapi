@@ -1,8 +1,9 @@
 const { erroResponse, defaultResponse } = require("../response");
+const mongoose = require("../../database/database");
 const Users = require("../models/Users");
 const Grupos = require("../models/Grupos");
 const httpStatus = require("http-status");
-
+const ObjectId = mongoose.Types.ObjectId;
 class UsersController {
   //Get all patients
   async indexPacientes(req, res) {
@@ -21,6 +22,7 @@ class UsersController {
       const users = await Users.find({
         $or: [{ paciente: false }, { paciente: null }],
       });
+
       res.send(defaultResponse(users));
     } catch (error) {
       res.send(erroResponse(error.message));
@@ -64,7 +66,7 @@ class UsersController {
 
   async createOrUpdate(req, res) {
     const { email, group } = req.body;
-    console.log(req.body);
+
     const dataCreate = req.body;
     try {
       const userExist = await Users.findOne({ email: email });
