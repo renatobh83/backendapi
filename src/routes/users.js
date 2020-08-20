@@ -13,6 +13,7 @@ users.get("/api/users/:email", usersController.getUserByEmail);
 users.get("/api/users/inativos", usersController.getAllInactive);
 
 users.post("/api/users", usersController.findOrCreate);
+users.put("/api/users/", usersController.createOrUpdate);
 users.put("/api/users/:email", usersController.updateUser);
 
 users.delete("/api/users", usersController.delete);

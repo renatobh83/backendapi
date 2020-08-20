@@ -53,6 +53,11 @@ UserSchema.pre("updateOne", async function (next) {
     next();
   }
 });
+UserSchema.post("updateOne", function (error, doc, next) {
+  if (error.name === "MongoError" && error.code === 11000)
+    next(new Error("E-mail/Usuario já existe, por favor tente novamente"));
+  else next(error);
+});
 const User = mongoose.model("User", UserSchema);
 
 module.exports = User;

@@ -20,7 +20,6 @@ class UsersController {
     try {
       const users = await Users.find({
         $or: [{ paciente: false }, { paciente: null }],
-        $and: [{ ativo: true }],
       });
       res.send(defaultResponse(users));
     } catch (error) {
@@ -49,12 +48,28 @@ class UsersController {
   }
   // create a Patient/Users
   async findOrCreate(req, res) {
-    const { email, group } = req.body;
+    const { email } = req.body;
     const dataCreate = req.body;
     try {
       const userExist = await Users.findOne({ email: email });
       if (userExist) {
-        //  await Users.updateOne({ email: email }, { $set: dataCreate });
+        return res.send(defaultResponse(userExist));
+      }
+      const user = await Users.create(dataCreate);
+      res.send(defaultResponse(user, httpStatus.CREATED));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+
+  async createOrUpdate(req, res) {
+    const { email, group } = req.body;
+    console.log(req.body);
+    const dataCreate = req.body;
+    try {
+      const userExist = await Users.findOne({ email: email });
+      if (userExist) {
+        await Users.updateOne({ email: email }, { $set: dataCreate });
         return res.send(defaultResponse(userExist));
       }
       const { _id: newUser, ...user } = await Users.create(dataCreate);
@@ -65,11 +80,9 @@ class UsersController {
       }
       res.send(defaultResponse(user, httpStatus.CREATED));
     } catch (error) {
-      console.log(error);
       res.send(erroResponse(error.message));
     }
   }
-
   //Update patient/users
   async updateUser(req, res) {
     try {
