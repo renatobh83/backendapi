@@ -15,7 +15,11 @@ class AppController {
     this.express.use(express.json());
     this.express.use(
       cors({
-        origin: ["http://192.168.1.226:3000", "http://localhost:3000"],
+        origin: [
+          "http://192.168.1.226:3000",
+          "http://localhost:3000",
+          "http://192.168.1.32:3000",
+        ],
         credentials: true,
       })
     );
