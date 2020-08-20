@@ -22,7 +22,15 @@ class UsersController {
       const users = await Users.find({
         $or: [{ paciente: false }, { paciente: null }],
       });
-
+      users.forEach(async (user) => {
+        const grupo = await Grupos.findById(
+          { _id: ObjectId(user.grupoId) },
+          { _id: 0, nome: 1 }
+        );
+        user.grupo = grupo.nome;
+        await user.save();
+      });
+      console.log(users);
       res.send(defaultResponse(users));
     } catch (error) {
       res.send(erroResponse(error.message));

@@ -1,7 +1,6 @@
 const mongoose = require("../../database/database");
 const { Schema } = require("../../database/database");
 
-const bcrypt = require("bcrypt");
 const UserSchema = new mongoose.Schema(
   {
     nome: {
@@ -38,7 +37,9 @@ const UserSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Grupos",
     },
-
+    grupo: {
+      type: String,
+    },
     ativo: {
       type: Boolean,
       default: true,
