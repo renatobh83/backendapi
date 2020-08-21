@@ -8,6 +8,6 @@ grupos.get("/api/grupo/:_id", gruposController.getName);
 
 grupos.post("/api/grupos", gruposController.store);
 grupos.put("/api/grupos/:nome", gruposController.editGroup);
-grupos.delete("/api/grupos", gruposController.delete);
+grupos.delete("/api/grupos/:_id", gruposController.delete);
 
 module.exports = grupos;

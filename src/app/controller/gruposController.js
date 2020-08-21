@@ -59,7 +59,7 @@ class GrupoController {
   // delete Group
   async delete(req, res) {
     try {
-      const grupoDeleted = await Grupos.deleteOne(req.query);
+      const grupoDeleted = await Grupos.deleteOne(req.params);
       res.send(defaultResponse(grupoDeleted));
     } catch (error) {
       res.send(erroResponse(error));
