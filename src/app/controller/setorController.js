@@ -27,7 +27,7 @@ class SetorController {
       const setorExist = await Setor.findOne(req.body);
       if (setorExist) return res.send(erroResponse("Setor já cadastrado"));
       const setor = await Setor.create(req.body);
-      res.send(defaultResponse("Setor criado", httpStatus.CREATED));
+      res.send(defaultResponse(setor, httpStatus.CREATED));
     } catch (error) {
       res.send(erroResponse(error.message));
     }

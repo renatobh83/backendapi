@@ -57,6 +57,7 @@ class UsersController {
         return res.send(defaultResponse(userExist));
       }
       const user = await Users.create(dataCreate);
+
       res.send(defaultResponse(user, httpStatus.CREATED));
     } catch (error) {
       res.send(erroResponse(error.message));

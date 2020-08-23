@@ -8,6 +8,10 @@ const SetorSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+  time: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now() - 3 * 60 * 60 * 1000,
