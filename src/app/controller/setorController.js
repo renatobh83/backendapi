@@ -1,7 +1,8 @@
 const Setor = require("./../models/Setor");
+const mongoose = require("../../database/database");
 const { defaultResponse, erroResponse } = require("./../response");
 const httpStatus = require("http-status");
-
+const ObjectId = mongoose.Types.ObjectId;
 class SetorController {
   // Return all setor
   async index(req, res) {
@@ -35,10 +36,18 @@ class SetorController {
   //Update setor
   async update(req, res) {
     try {
-      const setorExist = await Setor.findOne(req.body);
-      if (setorExist) return res.send(erroResponse("Setor já cadastrado"));
       const setor = await Setor.updateOne(req.params, { $set: req.body });
-      res.send(defaultResponse("Updated", httpStatus.NO_CONTENT));
+      res.send(defaultResponse(setor, httpStatus.NO_CONTENT));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+  //DELETE setor
+  async delete(req, res) {
+    try {
+      await Setor.deleteOne(req.params);
+
+      res.send(defaultResponse("Deleted", httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
     }

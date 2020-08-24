@@ -8,13 +8,15 @@ const ObjectId = mongoose.Types.ObjectId;
 class SalasController {
   // store new room
   async store(req, res) {
-    const { nome, setor } = req.body;
+    const { nome } = req.body;
 
     try {
-      const { _id: idSetor } = await Setor.findById({ _id: ObjectId(setor) });
-      const salaResponse = await Sala.create({ nome: nome });
-      salaResponse.setorId = idSetor;
-      await salaResponse.save();
+      const findSala = await Sala.findOne({ nome: nome });
+      if (findSala) return res.send(erroResponse("Descrição já cadastrada"));
+
+      const salaResponse = await Sala.create(req.body);
+      console.log(salaResponse);
+
       res.send(defaultResponse(salaResponse, httpStatus.CREATED));
     } catch (error) {
       res.send(erroResponse(error.message));
