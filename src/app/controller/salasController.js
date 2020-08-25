@@ -15,7 +15,6 @@ class SalasController {
       if (findSala) return res.send(erroResponse("Descrição já cadastrada"));
 
       const salaResponse = await Sala.create(req.body);
-      console.log(salaResponse);
 
       res.send(defaultResponse(salaResponse, httpStatus.CREATED));
     } catch (error) {
@@ -47,12 +46,11 @@ class SalasController {
   // Update Room
   async updateRoom(req, res) {
     const { salaId } = req.params;
-    const { nome } = req.body;
+    console.log(req.body);
     try {
       const salas = await Sala.findByIdAndUpdate(
         { _id: salaId },
-        { $set: req.body },
-        { new: true, select: { nome } }
+        { $set: req.body }
       );
       res.send(defaultResponse(salas, httpStatus.NO_CONTENT));
     } catch (error) {
