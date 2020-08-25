@@ -46,7 +46,7 @@ class SalasController {
   // Update Room
   async updateRoom(req, res) {
     const { salaId } = req.params;
-    console.log(req.body);
+
     try {
       const salas = await Sala.findByIdAndUpdate(
         { _id: salaId },
