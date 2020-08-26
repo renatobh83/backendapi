@@ -50,6 +50,7 @@ class UsersController {
   // create a Patient/Users
   async findOrCreate(req, res) {
     const { email } = req.body;
+
     const dataCreate = req.body;
     try {
       const userExist = await Users.findOne({ email: email });
@@ -57,7 +58,6 @@ class UsersController {
         return res.send(defaultResponse(userExist));
       }
       const user = await Users.create(dataCreate);
-
       res.send(defaultResponse(user, httpStatus.CREATED));
     } catch (error) {
       res.send(erroResponse(error.message));

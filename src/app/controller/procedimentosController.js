@@ -43,6 +43,7 @@ class ProcedimentosController {
   // store
   async store(req, res) {
     const { nome, setor } = req.body;
+
     try {
       const procedimentoExist = await Procedimentos.findOne(
         { procedimento: nome },
@@ -51,10 +52,7 @@ class ProcedimentosController {
       if (procedimentoExist)
         return res.send(erroResponse("Procedimento ja cadastrado"));
 
-      const newProc = await Procedimentos.create({
-        procedimento: nome,
-        setorId: setor,
-      });
+      const newProc = await Procedimentos.create(req.body);
 
       res.send(defaultResponse(newProc));
     } catch (error) {

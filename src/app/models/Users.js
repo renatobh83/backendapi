@@ -84,11 +84,14 @@ UserSchema.post("updateOne", function (error, doc, next) {
 UserSchema.pre("save", function (next) {
   const user = this;
 
-  bcrypt.hash(user.password, 10, function (err, hash) {
-    if (err) return next(new Error(" Erro inset"));
-    user.password = hash;
-    next();
-  });
+  if (user.password) {
+    bcrypt.hash(user.password, 10, function (err, hash) {
+      if (err) return next(new Error(" Erro inset"));
+      user.password = hash;
+      next();
+    });
+  }
+  next();
 });
 
 const User = mongoose.model("User", UserSchema);

@@ -24,7 +24,7 @@ class SalasController {
   // Get all room
   async getAllRoom(req, res) {
     try {
-      const salas = await Sala.find({}, { createdAt: 0, __v: 0 });
+      const salas = await Sala.find({ ativo: true }, { createdAt: 0, __v: 0 });
       res.send(defaultResponse(salas));
     } catch (error) {
       res.send(erroResponse(error.message));
@@ -44,14 +44,11 @@ class SalasController {
     }
   }
   // Update Room
-  async updateRoom(req, res) {
+  async deleteRoom(req, res) {
     const { salaId } = req.params;
 
     try {
-      const salas = await Sala.findByIdAndUpdate(
-        { _id: salaId },
-        { $set: req.body }
-      );
+      const salas = await Sala.deleteOne({ _id: salaId });
       res.send(defaultResponse(salas, httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
