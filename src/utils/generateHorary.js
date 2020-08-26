@@ -1,6 +1,6 @@
 const { eachDayOfInterval, format } = require("date-fns");
 const stringToDate = (date) => {
-  const parts = date.split("-");
+  const parts = date.split("/");
   const convertDate = new Date(parts[2], parts[1] - 1, parts[0]);
   return convertDate;
 };
@@ -15,6 +15,7 @@ const diff = (t1, t2, intervalo) => {
     let temp = 0;
     let novaHora = 0;
     temp = minutoT2 - intervalo;
+
     while (temp < 0) {
       novaHora -= 1;
       temp = temp + 60;
@@ -29,6 +30,7 @@ const diff = (t1, t2, intervalo) => {
 };
 module.exports = (props) => {
   const { start, end, t1, t2, intervalo, daysWeek } = props;
+
   const dateStart = stringToDate(start);
   const endStart = stringToDate(end);
   const diferencaMinutos = diff(t1, t2, intervalo);
@@ -37,6 +39,7 @@ module.exports = (props) => {
     start: dateStart,
     end: endStart,
   });
+
   let horasAgenda = [];
   var ID = function () {
     return "_" + Math.random().toString(36).substr(2, 9);
@@ -44,6 +47,7 @@ module.exports = (props) => {
   numDays.forEach((day) => {
     if (daysWeek.includes(day.getDay())) {
       let horaStart = t1.substr(0, 2) * 1;
+
       let minutosStart = t1.substr(3, 2) * 1;
       let x = 0;
       while (x <= diferencaMinutos) {
@@ -51,7 +55,7 @@ module.exports = (props) => {
           horaStart += 1;
           minutosStart = minutosStart - 60;
         }
-        if (minutosStart < 1) {
+        if (minutosStart < 10) {
           horasAgenda.push({
             id: ID(),
             data: format(day, "dd/MM"),
@@ -70,6 +74,7 @@ module.exports = (props) => {
             ocupado: false,
           });
         }
+
         minutosStart += intervalo;
         x += intervalo;
       }

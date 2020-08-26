@@ -117,8 +117,6 @@ class HorarioController {
     const startDate = dataInicio;
     const endDate = dataFim;
 
-    const sala = await Salas.findById({ _id: idSala });
-
     const values = {
       start: startDate,
       end: endDate,
@@ -127,11 +125,15 @@ class HorarioController {
       t1,
       t2,
     };
-    const horas = gerarHorarios(values);
 
+    const horas = gerarHorarios(values);
+    if (horas.length === 0) {
+      return res.send(erroResponse("Nenhum periodo gerado"));
+    }
+    console.log(horas);
     try {
       await Horarios.create({
-        salaId: sala,
+        salaId: idSala,
         periodo: horas,
       });
       res.send(defaultResponse("Horarios Gerados", httpStatus.CREATED));
