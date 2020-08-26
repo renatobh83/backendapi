@@ -12,6 +12,6 @@ procedimentos.put(
   "/api/procedimentos/:_id",
   procedimentosController.updateProcedimento
 );
-// procedimentos.delete("/api/grupos", procedimentosController.delete);
+procedimentos.delete("/api/procedimentos/:_id", procedimentosController.delete);
 
 module.exports = procedimentos;

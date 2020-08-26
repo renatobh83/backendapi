@@ -59,5 +59,13 @@ class ProcedimentosController {
       res.send(erroResponse(error.message));
     }
   }
+  async delete(req, res) {
+    try {
+      await Procedimentos.deleteOne(req.params);
+      res.send(defaultResponse("Procedimento apagad", httpStatus.NO_CONTENT));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
 }
 module.exports = new ProcedimentosController();
