@@ -43,6 +43,19 @@ class SalasController {
       res.send(erroResponse(error.message));
     }
   }
+  async getSalaBySetor(req, res) {
+    const { setorId } = req.params;
+    console.log(req.params);
+    try {
+      const salas = await Sala.find(
+        { setorId: ObjectId(setorId) },
+        { createdAt: 0, __v: 0 }
+      );
+      res.send(defaultResponse(salas));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
   // Update Room
   async deleteRoom(req, res) {
     const { salaId } = req.params;

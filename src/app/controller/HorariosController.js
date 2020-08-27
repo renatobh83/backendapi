@@ -85,18 +85,22 @@ class HorarioController {
   async getAllHoraryBySala(req, res) {
     const { sala } = req.params;
     try {
-      const horarios = await Horarios.aggregate([
-        {
-          $match: { salaId: ObjectId(sala) },
-        },
-        { $unwind: "$periodo" },
-        {
-          $group: {
-            _id: "$_id",
-            periodo: { $push: "$periodo" },
-          },
-        },
-      ]);
+      // const horarios = await Horarios.aggregate([
+      //   {
+      //     $match: { salaId: ObjectId(sala) },
+      //   },
+      //   { $unwind: "$periodo" },
+      //   {
+      //     $group: {
+      //     _id: "$_id",
+      //     periodo: { $push: "$periodo" },
+      //     },
+      //   },
+      // ]);
+      const horarios = await Horarios.find(
+        { salaId: ObjectId(sala) },
+        { periodo: 1, _id: 0 }
+      );
 
       res.send(defaultResponse(horarios));
     } catch (error) {
@@ -130,7 +134,6 @@ class HorarioController {
     if (horas.length === 0) {
       return res.send(erroResponse("Nenhum periodo gerado"));
     }
-    console.log(horas);
     try {
       await Horarios.create({
         salaId: idSala,

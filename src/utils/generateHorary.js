@@ -58,7 +58,7 @@ module.exports = (props) => {
         if (minutosStart < 10) {
           horasAgenda.push({
             id: ID(),
-            data: format(day, "dd/MM"),
+            data: format(day, "dd/MM/yyyy"),
             diaSemana: day.getDay(),
             timeInverval: intervalo,
             horaInicio: horaStart.toString().substr(-2) + ":0" + minutosStart,
@@ -67,7 +67,7 @@ module.exports = (props) => {
         } else {
           horasAgenda.push({
             id: ID(),
-            data: format(day, "dd/MM"),
+            data: format(day, "dd/MM/yyyy"),
             diaSemana: day.getDay(),
             timeInverval: intervalo,
             horaInicio: horaStart.toString() + ":" + minutosStart,
