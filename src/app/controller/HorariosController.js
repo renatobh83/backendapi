@@ -58,11 +58,12 @@ class HorarioController {
 
   // get horario livre
   async getHorarioLivre(req, res) {
-    const { sala, dia } = req.params;
+    const { setor, dia } = req.params;
+
     try {
       const horarios = await Horarios.aggregate([
         {
-          $match: { salaId: ObjectId(sala) },
+          $match: { setorId: ObjectId(setor) },
         },
         { $unwind: "$periodo" },
         {
@@ -82,29 +83,39 @@ class HorarioController {
     }
   }
   // get All horary of Room
-  async getAllHoraryBySala(req, res) {
-    const { sala } = req.params;
+  async getAllHoraryBySetor(req, res) {
+    const { setor } = req.params;
+
     try {
-      // const horarios = await Horarios.aggregate([
-      //   {
-      //     $match: { salaId: ObjectId(sala) },
-      //   },
-      //   { $unwind: "$periodo" },
-      //   {
-      //     $group: {
-      //     _id: "$_id",
-      //     periodo: { $push: "$periodo" },
-      //     },
-      //   },
-      // ]);
-      const horarios = await Horarios.find(
-        { salaId: ObjectId(sala) },
-        { periodo: 1, _id: 0 }
-      );
+      const horarios = await Horarios.aggregate([
+        {
+          $match: { setorId: ObjectId(setor) },
+        },
+        { $unwind: "$periodo" },
+        {
+          $match: { "periodo.ocupado": false },
+        },
+        {
+          $group: {
+            _id: "$_id",
+            periodo: { $push: "$periodo" },
+          },
+        },
+      ]);
 
       res.send(defaultResponse(horarios));
     } catch (error) {
       res.send(erroResponse(error.message));
+    }
+  }
+  async getAllHoraryBySala(req, res) {
+    const { sala } = req.params;
+
+    try {
+      const response = await Horarios.find({ salaId: ObjectId(sala) });
+      res.send(defaultResponse(response));
+    } catch (error) {
+      res.send(erroResponse(error));
     }
   }
   // Criar horarios
@@ -117,6 +128,7 @@ class HorarioController {
       t1,
       t2,
       idSala,
+      setorId,
     } = req.body;
     const startDate = dataInicio;
     const endDate = dataFim;
@@ -138,6 +150,7 @@ class HorarioController {
       await Horarios.create({
         salaId: idSala,
         periodo: horas,
+        setorId,
       });
       res.send(defaultResponse("Horarios Gerados", httpStatus.CREATED));
     } catch (error) {

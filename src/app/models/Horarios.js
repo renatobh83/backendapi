@@ -12,6 +12,10 @@ const HorariosSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Sala",
     },
+    setorId: {
+      type: Schema.Types.ObjectId,
+      ref: "Setor",
+    },
 
     createdAt: {
       type: Date,
