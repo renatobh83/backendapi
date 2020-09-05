@@ -4,6 +4,7 @@ const Salas = require("./../models/Salas");
 const gerarHorarios = require("./../../utils/generateHorary");
 const mongoose = require("../../database/database");
 const httpStatus = require("http-status");
+const moment = require("moment");
 
 const ObjectId = mongoose.Types.ObjectId;
 class HorarioController {
@@ -44,13 +45,25 @@ class HorarioController {
       horarios.forEach(async (horario) => {
         await Horarios.updateMany(
           {
-            salaId: ObjectId(sala),
+            // salaId: ObjectId(sala),
             "periodo.id": horario,
           },
           { $set: { "periodo.$.ocupado": true } }
         );
       });
       res.send(defaultResponse("Horarios Update", httpStatus.NO_CONTENT));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+  async horarioInativo(req, res) {
+    const { id } = req.body;
+    try {
+      await Horarios.findOneAndUpdate(
+        { "periodo.id": id },
+        { $set: { "periodo.$.ativo": false } }
+      );
+      res.send(defaultResponse("Update", httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
     }
@@ -83,17 +96,76 @@ class HorarioController {
     }
   }
   // get All horary of Room
+  // async getAllHoraryBySetor(req, res) {
+  //   const { setor, horario = "19:00" } = req.params;
+  //   const { nextHour } = req.query;
+  //   console.log(nextHour);
+  //   try {
+  //     const horarios = await Horarios.aggregate([
+  //       {
+  //         $match: { setorId: ObjectId(setor) },
+  //       },
+  //       { $unwind: "$periodo" },
+  //       {
+  //         $match: {
+  //           "periodo.ocupado": false,
+  //           // "periodo.horaInicio": { $gte: horario },
+  //         },
+  //       },
+  //       {
+  //         $group: {
+  //           _id: "$_id",
+  //           periodo: { $push: "$periodo" },
+  //         },
+  //       },
+  //     ]);
+
+  //     res.send(defaultResponse(horarios));
+  //   } catch (error) {
+  //     res.send(erroResponse(error.message));
+  //   }
+  // }
   async getAllHoraryBySetor(req, res) {
     const { setor } = req.params;
-
+    const { nextHour } = req.query;
+    console.log(nextHour);
+    let horario = "0:00";
+    if (nextHour) {
+      horario = nextHour;
+    }
+    console.log(horario);
     try {
       const horarios = await Horarios.aggregate([
-        {
-          $match: { setorId: ObjectId(setor) },
-        },
+        { $match: { setorId: ObjectId(setor) } },
         { $unwind: "$periodo" },
         {
-          $match: { "periodo.ocupado": false },
+          $addFields: {
+            data: {
+              $dateFromString: {
+                dateString: {
+                  $concat: ["$periodo.data", "T", "$periodo.horaInicio"],
+                },
+                format: "%d/%m/%YT%H:%M",
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            periodo: 1,
+            data: 1,
+          },
+        },
+        {
+          $match: {
+            "periodo.ocupado": false,
+            "periodo.ativo": true,
+            data: {
+              $gte: new Date(horario),
+              // $lt: new Date(horario),
+            },
+          },
         },
         {
           $group: {
@@ -112,7 +184,10 @@ class HorarioController {
     const { sala } = req.params;
 
     try {
-      const response = await Horarios.find({ salaId: ObjectId(sala) });
+      const response = await Horarios.find({
+        salaId: ObjectId(sala),
+        // "periodo.ativo": true,
+      });
       res.send(defaultResponse(response));
     } catch (error) {
       res.send(erroResponse(error));

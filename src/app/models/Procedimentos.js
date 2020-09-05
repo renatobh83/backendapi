@@ -14,6 +14,9 @@ const procedimentoSchema = new mongoose.Schema({
     ref: "Setor",
     required: true,
   },
+  tempo: {
+    type: String,
+  },
   ativo: {
     type: Boolean,
     default: true,
@@ -26,6 +29,10 @@ const procedimentoSchema = new mongoose.Schema({
     type: Date,
     default: Date.now() - 3 * 60 * 60 * 1000,
   },
+});
+
+procedimentoSchema.pre("find", function (next) {
+  next();
 });
 
 const Procedimentos = mongoose.model("Procedimentos", procedimentoSchema);

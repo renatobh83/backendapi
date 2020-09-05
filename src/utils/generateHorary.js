@@ -47,7 +47,6 @@ module.exports = (props) => {
   numDays.forEach((day) => {
     if (daysWeek.includes(day.getDay())) {
       let horaStart = t1.substr(0, 2) * 1;
-
       let minutosStart = t1.substr(3, 2) * 1;
       let x = 0;
       while (x <= diferencaMinutos) {
@@ -60,18 +59,20 @@ module.exports = (props) => {
             id: ID(),
             data: format(day, "dd/MM/yyyy"),
             diaSemana: day.getDay(),
-            timeInverval: intervalo,
+            timeInterval: intervalo,
             horaInicio: horaStart.toString().substr(-2) + ":0" + minutosStart,
             ocupado: false,
+            ativo: true,
           });
         } else {
           horasAgenda.push({
             id: ID(),
             data: format(day, "dd/MM/yyyy"),
             diaSemana: day.getDay(),
-            timeInverval: intervalo,
+            timeInterval: intervalo,
             horaInicio: horaStart.toString() + ":" + minutosStart,
             ocupado: false,
+            ativo: true,
           });
         }
 

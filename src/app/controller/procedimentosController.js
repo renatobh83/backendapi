@@ -1,15 +1,23 @@
 const { defaultResponse, erroResponse } = require("../response");
-const mongoose = require("../../database/database");
+
 const Procedimentos = require("./../models/Procedimentos");
-const Setor = require("./../models/Setor");
+
 const httpStatus = require("http-status");
 
-const ObjectId = mongoose.Types.ObjectId;
 class ProcedimentosController {
   //Get all
   async index(req, res) {
     try {
       const procedimentos = await Procedimentos.find({}, {});
+
+      res.send(defaultResponse(procedimentos));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+  async indexAgendamento(req, res) {
+    try {
+      const procedimentos = await Procedimentos.find({ ativo: true }, {});
 
       res.send(defaultResponse(procedimentos));
     } catch (error) {

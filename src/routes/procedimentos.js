@@ -4,6 +4,10 @@ const verifyToken = require("../middlewares/checkToken");
 
 procedimentos.get("/api/procedimentos", procedimentosController.index);
 procedimentos.get(
+  "/api/procedimentos/agendamento",
+  procedimentosController.indexAgendamento
+);
+procedimentos.get(
   "/api/procedimentos/:_id",
   procedimentosController.getBySetor
 );
