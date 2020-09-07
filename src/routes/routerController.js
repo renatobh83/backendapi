@@ -6,6 +6,7 @@ const horarios = require("./Horarios");
 const salas = require("./salas");
 const setor = require("./setor");
 const procedimentos = require("./procedimentos");
+const dadosAgendamento = require("./dadosAgendamento");
 
 const routeController = (app) => {
   app.use(index);
@@ -16,6 +17,7 @@ const routeController = (app) => {
   app.use(salas);
   app.use(setor);
   app.use(procedimentos);
+  app.use(dadosAgendamento);
 };
 
 module.exports = routeController;

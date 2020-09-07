@@ -128,12 +128,11 @@ class HorarioController {
   async getAllHoraryBySetor(req, res) {
     const { setor } = req.params;
     const { nextHour } = req.query;
-    console.log(nextHour);
+
     let horario = "0:00";
     if (nextHour) {
       horario = nextHour;
     }
-    console.log(horario);
     try {
       const horarios = await Horarios.aggregate([
         { $match: { setorId: ObjectId(setor) } },
