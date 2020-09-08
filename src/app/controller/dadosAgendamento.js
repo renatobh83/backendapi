@@ -45,6 +45,12 @@ class DadosAgendamentoController {
 
     res.send(defaultResponse(pacienteAgendamnentos));
   }
+  async cancelAgendamento(req, res) {
+    const { id } = req.params;
+    const respons = await DadosAgendamento.deleteOne({ "dados.hora.id": id });
+    console.log(respons);
+    res.send(defaultResponse("cancelado"));
+  }
 }
 
 module.exports = new DadosAgendamentoController();

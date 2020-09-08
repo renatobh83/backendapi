@@ -40,7 +40,7 @@ class HorarioController {
   }
   // update
   async updateHorario(req, res) {
-    const { sala, horarios } = req.body;
+    const { ocupado, horarios } = req.body;
     try {
       horarios.forEach(async (horario) => {
         await Horarios.updateMany(
@@ -48,7 +48,7 @@ class HorarioController {
             // salaId: ObjectId(sala),
             "periodo.id": horario,
           },
-          { $set: { "periodo.$.ocupado": true } }
+          { $set: { "periodo.$.ocupado": ocupado } }
         );
       });
       res.send(defaultResponse("Horarios Update", httpStatus.NO_CONTENT));

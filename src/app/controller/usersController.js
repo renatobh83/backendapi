@@ -10,7 +10,7 @@ class UsersController {
     try {
       const pacientes = await Users.find({
         $and: [{ ativo: true }, { paciente: true }],
-      });
+      }).limit(50);
       res.send(defaultResponse(pacientes));
     } catch (error) {
       res.send(erroResponse(error.message));
@@ -54,10 +54,12 @@ class UsersController {
     const dataCreate = req.body;
     try {
       const userExist = await Users.findOne({ email: email });
+      console.log(userExist);
       if (userExist) {
         return res.send(defaultResponse(userExist));
       }
       const user = await Users.create(dataCreate);
+
       res.send(defaultResponse(user, httpStatus.CREATED));
     } catch (error) {
       res.send(erroResponse(error.message));
@@ -87,9 +89,15 @@ class UsersController {
   }
   //Update patient/users
   async updateUser(req, res) {
+    const { nome, password, telefone, dtNascimento } = req.body;
+
     try {
-      const { email } = req.params;
-      const update = await Users.updateOne({ email }, { $set: req.body });
+      const update = await Users.findOne(req.params);
+      update.nome = nome;
+      update.password = password;
+      update.telefone = telefone;
+      update.dtNascimento = dtNascimento;
+      update.save();
       res.send(defaultResponse(update.nModified, httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));

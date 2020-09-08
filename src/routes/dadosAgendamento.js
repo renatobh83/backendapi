@@ -11,6 +11,6 @@ dadosAgendamento.get(
 
 dadosAgendamento.post("/api/da", dadosControler.store);
 // dadosAgendamento.put("/api/grupos/:nome", DadosAgendamentoController.editGroup);
-// dadosAgendamento.delete("/api/grupos/:_id", DadosAgendamentoController.delete);
+dadosAgendamento.delete("/api/da/:id", dadosControler.cancelAgendamento);
 
 module.exports = dadosAgendamento;

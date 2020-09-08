@@ -17,7 +17,9 @@ class ProcedimentosController {
   }
   async indexAgendamento(req, res) {
     try {
-      const procedimentos = await Procedimentos.find({ ativo: true }, {});
+      const procedimentos = await Procedimentos.find({ ativo: true }, {}).sort({
+        setorId: 1,
+      });
 
       res.send(defaultResponse(procedimentos));
     } catch (error) {

@@ -28,6 +28,9 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       minlength: 9,
     },
+    dtNascimento: {
+      type: String,
+    },
     paciente: {
       type: Boolean,
     },
@@ -63,18 +66,6 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.pre("updateOne", async function (next) {
-  const self = this;
-  if (self.password) {
-    bcrypt.hash(self.getUpdate().$set.password, 10, function (err, hash) {
-      if (err) return next(new Error(" Erro inset"));
-      self.update({}, { password: hash });
-      next();
-    });
-  }
-  next();
-});
-
 UserSchema.post("updateOne", function (error, doc, next) {
   if (error.name === "MongoError" && error.code === 11000)
     next(new Error("E-mail/Usuario já existe, por favor tente novamente"));
@@ -88,10 +79,12 @@ UserSchema.pre("save", function (next) {
     bcrypt.hash(user.password, 10, function (err, hash) {
       if (err) return next(new Error(" Erro inset"));
       user.password = hash;
+
       next();
     });
+  } else {
+    next();
   }
-  next();
 });
 
 const User = mongoose.model("User", UserSchema);
