@@ -19,6 +19,7 @@ class AppController {
           "http://192.168.1.226:3000",
           "http://localhost:3000",
           "http://192.168.1.32:3000",
+          "https://healtcare.herokuapp.com",
         ],
         credentials: true,
       })
