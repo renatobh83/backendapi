@@ -21,7 +21,7 @@ const routeController = (app) => {
   app.use(procedimentos);
   app.use(dadosAgendamento);
   app.use(planos);
-  app.use(tabelas);
+  // app.use(tabelas);
 };
 
 module.exports = routeController;
