@@ -1,9 +1,9 @@
 const { defaultResponse, erroResponse } = require("../response");
 const mongoose = require("../../database/database");
-const Sala = require("../models/Salas");
-const Setor = require("../models/Setor");
-const httpStatus = require("http-status");
 const ObjectId = mongoose.Types.ObjectId;
+const Sala = require("../models/Salas");
+
+const httpStatus = require("http-status");
 
 class SalasController {
   // store new room
@@ -45,7 +45,7 @@ class SalasController {
   }
   async getSalaBySetor(req, res) {
     const { setorId } = req.params;
-    console.log(req.params);
+
     try {
       const salas = await Sala.find(
         { setorId: ObjectId(setorId) },

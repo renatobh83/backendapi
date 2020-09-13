@@ -11,6 +11,9 @@ const DadosAgendamentoSchema = new mongoose.Schema({
       type: Object,
     },
   ],
+  agent: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now() - 3 * 60 * 60 * 1000,

@@ -54,7 +54,7 @@ class UsersController {
     const dataCreate = req.body;
     try {
       const userExist = await Users.findOne({ email: email });
-      console.log(userExist);
+
       if (userExist) {
         return res.send(defaultResponse(userExist));
       }

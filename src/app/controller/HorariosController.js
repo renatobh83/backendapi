@@ -58,6 +58,7 @@ class HorarioController {
   }
   async horarioInativo(req, res) {
     const { id } = req.body;
+
     try {
       await Horarios.findOneAndUpdate(
         { "periodo.id": id },
@@ -185,8 +186,9 @@ class HorarioController {
     try {
       const response = await Horarios.find({
         salaId: ObjectId(sala),
-        // "periodo.ativo": true,
+        "periodo.ativo": true,
       });
+
       res.send(defaultResponse(response));
     } catch (error) {
       res.send(erroResponse(error));
