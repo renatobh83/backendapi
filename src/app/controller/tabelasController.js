@@ -1,6 +1,6 @@
 const { defaultResponse, erroResponse } = require("../response");
 
-const Tabelas = require("./models/Tabelas");
+const Tabelas = require("./../models/Tabelas");
 const mongoose = require("../../database/database");
 const httpStatus = require("http-status");
 const ObjectId = mongoose.Types.ObjectId;
