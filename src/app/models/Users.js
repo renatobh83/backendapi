@@ -78,8 +78,8 @@ UserSchema.pre("save", function (next) {
     bcrypt.hash(user.password, 10, function (err, hash) {
       if (err) return next(new Error("Pass not found"));
       user.password = hash;
-      console.log(user);
-      next(new Error("erro"));
+
+      next();
     });
   } else {
     next();
