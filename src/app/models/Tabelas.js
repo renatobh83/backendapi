@@ -1,5 +1,5 @@
 const mongoose = require("../../database/database");
-const { Schema } = require("../../database/database");
+
 const TabelaSchema = new mongoose.Schema({
   nome: {
     type: String,
