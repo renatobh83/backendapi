@@ -19,10 +19,6 @@ const TabelaSchema = new mongoose.Schema({
   },
 });
 
-TabelaSchema.pre("deleteOne", function (next) {
-  next(new Error("error"));
-});
-
 const Tabela = mongoose.model("Tabela", TabelaSchema);
 
 module.exports = Tabela;
