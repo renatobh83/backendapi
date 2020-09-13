@@ -74,13 +74,12 @@ UserSchema.post("updateOne", function (error, doc, next) {
 
 UserSchema.pre("save", function (next) {
   const user = this;
-
   if (user.password) {
     bcrypt.hash(user.password, 10, function (err, hash) {
-      if (err) return next(new Error(" Erro inset"));
+      if (err) return next(new Error("Pass not found"));
       user.password = hash;
-
-      next();
+      console.log(user);
+      next(new Error("erro"));
     });
   } else {
     next();

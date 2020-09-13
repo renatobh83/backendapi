@@ -1,5 +1,4 @@
 const tabelas = require("express").Router();
-// const TabelasController = require("../app/controller/TabelasController");
 const tabelasController = require("../app/controller/tabelasController");
 
 const verifyToken = require("../middlewares/checkToken");
