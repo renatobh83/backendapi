@@ -4,13 +4,13 @@ const tabelasController = require("../app/controller/tabelasController");
 
 const verifyToken = require("../middlewares/checkToken");
 
-tabelas.get("/api/tabelas", TabelasController.index);
+tabelas.get("/api/tabelas", tabelasController.index);
 // tabelas.get("/api/tabelas/:_id", TabelasController.getSetorById);
-tabelas.put("/api/tabelas/:_id", TabelasController.updateExames);
-tabelas.post("/api/tabelas", TabelasController.store);
+tabelas.put("/api/tabelas/:_id", tabelasController.updateExames);
+tabelas.post("/api/tabelas", tabelasController.store);
 tabelas.delete(
   "/api/tabelas/:procedimento",
-  TabelasController.deleteProcedimento
+  tabelasController.deleteProcedimento
 );
 
 module.exports = tabelas;
