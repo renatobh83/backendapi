@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema(
     telefone: {
       type: String,
       trim: true,
-      minlength: 9,
+      minlength: 11,
     },
     dtNascimento: {
       type: String,

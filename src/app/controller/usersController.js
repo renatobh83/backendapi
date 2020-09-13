@@ -89,16 +89,18 @@ class UsersController {
   }
   //Update patient/users
   async updateUser(req, res) {
-    const { nome, password, telefone, dtNascimento } = req.body;
+    const { nome, password, telefone, dtNascimento, email } = req.body;
 
     try {
       const update = await Users.findOne(req.params);
+
       update.nome = nome;
+      update.email = email;
       update.password = password;
       update.telefone = telefone;
       update.dtNascimento = dtNascimento;
       update.save();
-      res.send(defaultResponse(update.nModified, httpStatus.NO_CONTENT));
+      res.send(defaultResponse(update, httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
     }

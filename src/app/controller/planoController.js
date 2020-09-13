@@ -1,7 +1,8 @@
 const { defaultResponse, erroResponse } = require("../response");
 const Planos = require("../models/Planos");
 const httpStatus = require("http-status");
-
+const mongoose = require("../../database/database");
+const ObjectId = mongoose.Types.ObjectId;
 class PlanosController {
   async store(req, res) {
     try {
@@ -28,6 +29,31 @@ class PlanosController {
     try {
       await Planos.updateOne(req.params, { $set: req.body });
       res.send(defaultResponse(httpStatus.NO_CONTENT));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+
+  async getExamesFromPlano(req, res) {
+    const { _id: id } = req.params;
+    try {
+      const response = await Planos.aggregate([
+        {
+          $match: { _id: ObjectId(id) },
+        },
+        {
+          $lookup: {
+            from: "tabelas",
+            localField: "tabela",
+            foreignField: "_id",
+            as: "ex",
+          },
+        },
+        { $unwind: "$ex" },
+        { $project: { ex: 1 } },
+      ]);
+
+      res.send(defaultResponse(response));
     } catch (error) {
       res.send(erroResponse(error.message));
     }
