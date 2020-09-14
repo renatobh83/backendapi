@@ -41,6 +41,7 @@ class HorarioController {
   // update
   async updateHorario(req, res) {
     const { ocupado, horarios } = req.body;
+
     try {
       horarios.forEach(async (horario) => {
         await Horarios.updateMany(

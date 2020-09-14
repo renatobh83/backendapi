@@ -25,9 +25,8 @@ const GruposSchema = new mongoose.Schema({
   },
 });
 GruposSchema.pre("deleteOne", { document: true }, async function (next) {
-  console.log(this);
   const users = await User.findById({ grupoId: this._conditions });
-  console.log(users);
+
   return next(new Error("Você não tem permissão para trocar de grupo"));
 });
 

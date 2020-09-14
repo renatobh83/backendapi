@@ -50,7 +50,7 @@ class PlanosController {
           },
         },
         { $unwind: "$ex" },
-        { $project: { ex: 1 } },
+        // { $project: { ex: 1 } },
       ]);
 
       res.send(defaultResponse(response));

@@ -20,7 +20,6 @@ users.delete("/api/users", usersController.delete);
 users.delete("/api/users/restoring", usersController.restoring);
 
 users.use(function (user, req, res, next) {
-  console.log(user);
   res.status(200).send(user);
 });
 module.exports = users;

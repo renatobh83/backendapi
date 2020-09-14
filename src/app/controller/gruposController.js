@@ -31,7 +31,7 @@ class GrupoController {
   // novo grupo
   async store(req, res) {
     const { nome } = req.body;
-    console.log(req.body);
+
     try {
       if (nome) {
         const grupoExist = await Grupos.findOne({ nome: nome });
