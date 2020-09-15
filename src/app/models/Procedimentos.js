@@ -1,5 +1,6 @@
 const mongoose = require("../../database/database");
 const { Schema } = require("../../database/database");
+const Tabela = require("./Tabelas");
 
 const procedimentoSchema = new mongoose.Schema({
   procedimento: {
@@ -31,8 +32,33 @@ const procedimentoSchema = new mongoose.Schema({
   },
 });
 
-procedimentoSchema.pre("find", function (next) {
-  next();
+procedimentoSchema.pre("updateOne", function (next) {
+  const self = this;
+  const id = self._conditions._id;
+  Tabela.findOne({ "exames.exame._id": id }).then((res) => {
+    if (res) {
+      return next(
+        new Error(
+          "Exame não pode ser desativado pois já este associado a uma tabela de procedimento, por favor remova da tabela para ser desativado"
+        )
+      );
+    } else {
+      next();
+    }
+  });
+});
+procedimentoSchema.pre("deleteOne", function (next) {
+  const self = this;
+  const id = self._conditions._id;
+  Tabela.findOne({ "exames.exame._id": id }).then((res) => {
+    if (res)
+      return next(
+        Error(
+          "Exame não pode ser excluído pois já este associado a uma tabela de procedimento, por favor remova da tabela para ser excluído"
+        )
+      );
+    next();
+  });
 });
 
 const Procedimentos = mongoose.model("Procedimentos", procedimentoSchema);

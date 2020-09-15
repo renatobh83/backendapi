@@ -1,5 +1,5 @@
 const mongoose = require("../../database/database");
-
+const Sala = require("./Salas");
 const SetorSchema = new mongoose.Schema({
   nome: {
     type: String,
@@ -16,6 +16,21 @@ const SetorSchema = new mongoose.Schema({
     type: Date,
     default: Date.now() - 3 * 60 * 60 * 1000,
   },
+});
+
+SetorSchema.pre("deleteOne", function (next) {
+  const self = this;
+  const id = self._conditions._id;
+
+  Sala.findOne({ setorId: id }).then((response) => {
+    if (response)
+      return next(
+        Error(
+          "Setor não pode ser excluído pois já este associado a uma sala de atendimento, por favor remova a associação para ser excluído"
+        )
+      );
+    next();
+  });
 });
 
 const Setor = mongoose.model("Setor", SetorSchema);

@@ -3,6 +3,7 @@ const { defaultResponse, erroResponse } = require("../response");
 const Procedimentos = require("./../models/Procedimentos");
 
 const httpStatus = require("http-status");
+const Tabela = require("../models/Tabelas");
 
 class ProcedimentosController {
   //Get all
@@ -45,6 +46,7 @@ class ProcedimentosController {
   async updateProcedimento(req, res) {
     try {
       await Procedimentos.updateOne(req.params, { $set: req.body });
+
       res.send(defaultResponse({}, httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));

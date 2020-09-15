@@ -19,6 +19,11 @@ const TabelaSchema = new mongoose.Schema({
   },
 });
 
+// TabelaSchema.pre("updateOne", function (next) {
+//   const self = this;
+//   console.log(self);
+// });
+
 const Tabela = mongoose.model("Tabela", TabelaSchema);
 
 module.exports = Tabela;

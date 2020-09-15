@@ -46,8 +46,8 @@ class SetorController {
   async delete(req, res) {
     try {
       await Setor.deleteOne(req.params);
-
-      res.send(defaultResponse("Deleted", httpStatus.NO_CONTENT));
+      const setores = await Setor.find({});
+      res.send(defaultResponse(setores, httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
     }
