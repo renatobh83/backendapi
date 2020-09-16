@@ -24,11 +24,6 @@ const GruposSchema = new mongoose.Schema({
     default: Date.now() - 3 * 60 * 60 * 1000,
   },
 });
-GruposSchema.pre("deleteOne", { document: true }, async function (next) {
-  const users = await User.findById({ grupoId: this._conditions });
-
-  return next(new Error("Você não tem permissão para trocar de grupo"));
-});
 
 const Grupos = mongoose.model("Grupos", GruposSchema);
 

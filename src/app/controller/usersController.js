@@ -1,9 +1,9 @@
 const { erroResponse, defaultResponse } = require("../response");
-const mongoose = require("../../database/database");
+
 const Users = require("../models/Users");
 const Grupos = require("../models/Grupos");
 const httpStatus = require("http-status");
-const ObjectId = mongoose.Types.ObjectId;
+
 class UsersController {
   //Get all patients
   async indexPacientes(req, res) {
@@ -50,13 +50,26 @@ class UsersController {
   // create a Patient/Users
   async findOrCreate(req, res) {
     const { email } = req.body;
-
     const dataCreate = req.body;
+
     try {
       const userExist = await Users.findOne({ email: email });
 
       if (userExist) {
-        return res.send(defaultResponse(userExist));
+        if (!userExist.paciente) {
+          const idGrupo = userExist.grupoId;
+          const response = await Grupos.findById(
+            { _id: idGrupo },
+            { permissaoId: 1, _id: 0 }
+          );
+          const userPermissoes = {
+            user: userExist,
+            permissoes: response.permissaoId,
+          };
+
+          return res.send(defaultResponse(userPermissoes));
+        }
+        return res.send(defaultResponse({ user: userExist }));
       }
       const user = await Users.create(dataCreate);
 
@@ -68,7 +81,6 @@ class UsersController {
 
   async createOrUpdate(req, res) {
     const { email, group } = req.body;
-
     const dataCreate = req.body;
     try {
       const userExist = await Users.findOne({ email: email });

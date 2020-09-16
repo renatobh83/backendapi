@@ -36,6 +36,7 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
+      select: false,
     },
     grupoId: {
       type: Schema.Types.ObjectId,
@@ -57,6 +58,7 @@ const UserSchema = new mongoose.Schema(
       default: Date.now() - 3 * 60 * 60 * 1000,
     },
   },
+  { strict: false },
   {
     writeConcern: {
       w: "majority",
