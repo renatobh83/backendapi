@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const Grupos = require("./Grupos");
 const UserSchema = new mongoose.Schema(
   {
-    nome: {
+    name: {
       type: String,
       required: true,
       uppercase: true,
@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    username: {
+    nickname: {
       type: String,
       required: true,
       lowercase: true,

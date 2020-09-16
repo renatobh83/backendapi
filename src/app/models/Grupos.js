@@ -1,6 +1,5 @@
 const mongoose = require("../../database/database");
 const { Schema } = require("../../database/database");
-const User = require("./Users");
 
 const GruposSchema = new mongoose.Schema({
   nome: {

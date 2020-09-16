@@ -1,14 +1,15 @@
 const { erroResponse, defaultResponse } = require("../response");
 
-const Users = require("../models/Users");
+const Users = require("../models/UsersOld");
 const Grupos = require("../models/Grupos");
 const httpStatus = require("http-status");
+const User = require("../models/Users");
 
 class UsersController {
   //Get all patients
   async indexPacientes(req, res) {
     try {
-      const pacientes = await Users.find({
+      const pacientes = await User.find({
         $and: [{ ativo: true }, { paciente: true }],
       }).limit(50);
       res.send(defaultResponse(pacientes));
@@ -19,7 +20,7 @@ class UsersController {
   // Get all Users
   async indexUsers(req, res) {
     try {
-      const users = await Users.find({
+      const users = await User.find({
         $or: [{ paciente: false }, { paciente: null }],
       });
       res.send(defaultResponse(users));
@@ -27,10 +28,29 @@ class UsersController {
       res.send(erroResponse(error.message));
     }
   }
-  async getUserByEmail(req, res) {
+  async userLogin(req, res) {
     try {
-      const user = await Users.findOne(req.params, { password: 0 });
-
+      const user = await User.findOne({ email: req.user.email });
+      if (user === null) {
+        const paciente = req.user.sub.split("|");
+        if (paciente[0] !== "auth0") {
+          const newUser = new User(req.user);
+          newUser.paciente = true;
+          newUser.save();
+          return res.send(defaultResponse(newUser));
+        }
+      }
+      res.send(defaultResponse(user));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
+  async getUserByEmail(req, res) {
+    console.log(req.user);
+    try {
+      // const user = await Users.findOne(req.params, { password: 0 });
+      const user = await User.findOne({ email: req.user.email });
+      console.log(user);
       res.send(defaultResponse(user));
     } catch (error) {
       res.send(erroResponse(error.message));
@@ -39,7 +59,7 @@ class UsersController {
   // Get user/Patient inactive
   async getAllInactive(req, res) {
     try {
-      const users = await Users.find({
+      const users = await User.find({
         $and: [{ ativo: false }],
       });
       res.send(defaultResponse(users));
@@ -49,11 +69,12 @@ class UsersController {
   }
   // create a Patient/Users
   async findOrCreate(req, res) {
+    console.log(req.user);
     const { email } = req.body;
     const dataCreate = req.body;
 
     try {
-      const userExist = await Users.findOne({ email: email });
+      const userExist = await User.findOne({ email: email });
 
       if (userExist) {
         if (!userExist.paciente) {
@@ -71,7 +92,7 @@ class UsersController {
         }
         return res.send(defaultResponse({ user: userExist }));
       }
-      const user = await Users.create(dataCreate);
+      const user = await User.create(dataCreate);
 
       res.send(defaultResponse(user, httpStatus.CREATED));
     } catch (error) {
@@ -83,12 +104,12 @@ class UsersController {
     const { email, group } = req.body;
     const dataCreate = req.body;
     try {
-      const userExist = await Users.findOne({ email: email });
+      const userExist = await User.findOne({ email: email });
       if (userExist) {
-        await Users.updateOne({ email: email }, { $set: dataCreate });
+        await User.updateOne({ email: email }, { $set: dataCreate });
         return res.send(defaultResponse(userExist));
       }
-      const { _id: newUser, ...user } = await Users.create(dataCreate);
+      const { _id: newUser, ...user } = await User.create(dataCreate);
       if (group) {
         const g = await Grupos.findById(group);
         g.userId.push(newUser);
@@ -101,17 +122,18 @@ class UsersController {
   }
   //Update patient/users
   async updateUser(req, res) {
-    const { nome, password, telefone, dtNascimento, email } = req.body;
-
+    const { name, password, telefone, dtNascimento, email } = req.body;
+    console.log(req.body);
     try {
-      const update = await Users.findOne(req.params);
+      const update = await User.findOne(req.params);
 
-      update.nome = nome;
+      update.name = name;
       update.email = email;
       update.password = password;
       update.telefone = telefone;
       update.dtNascimento = dtNascimento;
       update.save();
+
       res.send(defaultResponse(update, httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
@@ -121,7 +143,7 @@ class UsersController {
   // inactive Patient/users
   async delete(req, res) {
     try {
-      const response = await Users.updateOne(req.query, {
+      const response = await User.updateOne(req.query, {
         $set: { ativo: false },
       });
       res.send(defaultResponse(response.nModified, httpStatus.NO_CONTENT));
@@ -132,7 +154,7 @@ class UsersController {
   // Restoring patient/users
   async restoring(req, res) {
     try {
-      const response = await Users.updateOne(req.query, {
+      const response = await User.updateOne(req.query, {
         $set: { ativo: true },
       });
       res.send(defaultResponse(response.nModified, httpStatus.NO_CONTENT));

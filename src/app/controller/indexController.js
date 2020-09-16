@@ -1,5 +1,4 @@
 const { defaultResponse, erroResponse } = require("../response");
-const Users = require("../models/Users");
 
 class indexController {
   async ping(req, res) {

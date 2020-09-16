@@ -10,6 +10,9 @@ const users = require("express").Router();
 users.get("/api/ping", indexController.ping);
 users.get("/api/pacientes", usersController.indexPacientes);
 users.get("/api/users", verifyToken, usersController.indexUsers);
+
+users.get("/api/users/login", verifyToken, usersController.userLogin);
+
 users.get("/api/users/:email", usersController.getUserByEmail);
 
 users.get("/api/users/inativos", usersController.getAllInactive);
