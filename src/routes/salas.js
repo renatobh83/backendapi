@@ -3,7 +3,7 @@ const salasController = require("../app/controller/salasController");
 const verifyToken = require("../middlewares/checkToken");
 const { check } = require("../middlewares/checkPermission");
 
-salas.get("/api/salas/horarios", verifyToken, salasController.salasHorarioss);
+salas.get("/api/salas/horarios", verifyToken, salasController.salasHorarios);
 salas.get("/api/salas/:salaId", verifyToken, salasController.getSalaById);
 salas.get("/api/sala/:setorId", verifyToken, salasController.getSalaBySetor);
 //Rotas Protogidas
