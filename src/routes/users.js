@@ -12,17 +12,16 @@ users.get("/api/ping", indexController.ping);
 users.get("/api/pacientes", verifyToken, usersController.indexPacientes);
 
 // listar  todos usuario
-users.get("/api/users", verifyToken, check, usersController.indexUsers);
+users.get("/api/usuarios", verifyToken, check, usersController.indexUsers);
 
-users.get("/api/users/login", verifyToken, usersController.userLogin);
+users.get("/api/usuarios/login", verifyToken, usersController.userLogin);
+users.put("/api/usuarios/:email", verifyToken, usersController.updateUser);
 
+users.post("/api/usuarios", verifyToken, check, usersController.findOrCreate);
+users.delete("/api/usuarios", verifyToken, check, usersController.delete);
 // users.get("/api/users/:email", usersController.getUserByEmail);
 // users.get("/api/users/inativos", usersController.getAllInactive);
-// users.post("/api/users", verifyToken, check, usersController.findOrCreate);
-
-users.put("/api/users/", verifyToken, check, usersController.createOrUpdate);
-users.put("/api/users/:email", verifyToken, check, usersController.updateUser);
-users.delete("/api/users", verifyToken, check, usersController.delete);
+// users.put("/api/users/", verifyToken, check, usersController.createOrUpdate);
 // users.delete("/api/users/restoring", usersController.restoring);
 
 module.exports = users;

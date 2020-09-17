@@ -30,6 +30,14 @@ class SalasController {
       res.send(erroResponse(error.message));
     }
   }
+  async salasHorarios(req, res) {
+    try {
+      const salas = await Sala.find({ ativo: true }, { createdAt: 0, __v: 0 });
+      res.send(defaultResponse(salas));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
   // Get room by id
   async getSalaById(req, res) {
     const { salaId } = req.params;

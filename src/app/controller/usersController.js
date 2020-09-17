@@ -65,35 +65,35 @@ class UsersController {
   //   }
   // }
   // create a Patient/Users
-  // async findOrCreate(req, res) {
-  //   const { email } = req.body;
-  //   const dataCreate = req.body;
+  async findOrCreate(req, res) {
+    const { email } = req.body;
+    const dataCreate = req.body;
 
-  //   try {
-  //     const userExist = await User.findOne({ email: email });
-  //     // if (userExist) {
-  //       // if (!userExist.paciente) {
-  //       //   const idGrupo = userExist.grupoId;
-  //       //   const response = await Grupos.findById(
-  //       //     { _id: idGrupo },
-  //       //     { permissaoId: 1, _id: 0 }
-  //       //   );
-  //       //   const userPermissoes = {
-  //       //     user: userExist,
-  //       //     permissoes: response.permissaoId,
-  //       //   };
+    try {
+      const userExist = await User.findOne({ email: email });
+      if (userExist) {
+        if (!userExist.paciente) {
+          const idGrupo = userExist.grupoId;
+          const response = await Grupos.findById(
+            { _id: idGrupo },
+            { permissaoId: 1, _id: 0 }
+          );
+          const userPermissoes = {
+            user: userExist,
+            permissoes: response.permissaoId,
+          };
 
-  //       //   return res.send(defaultResponse(userPermissoes));
-  //       // }
-  //       return res.send(defaultResponse(userExist));
-  //     }
-  //     const user = await User.create(dataCreate);
+          return res.send(defaultResponse(userPermissoes));
+        }
+        return res.send(defaultResponse(userExist));
+      }
+      const user = await User.create(dataCreate);
 
-  //     res.send(defaultResponse(user, httpStatus.CREATED));
-  //   } catch (error) {
-  //     res.send(erroResponse(error.message));
-  //   }
-  // }
+      res.send(defaultResponse(user, httpStatus.CREATED));
+    } catch (error) {
+      res.send(erroResponse(error.message));
+    }
+  }
 
   async createOrUpdate(req, res) {
     const { email, group } = req.body;
