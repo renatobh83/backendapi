@@ -1,11 +1,15 @@
 const setor = require("express").Router();
 const setorController = require("../app/controller/setorController");
 const verifyToken = require("../middlewares/checkToken");
+const { check } = require("../middlewares/checkPermission");
 
-setor.get("/api/setor", setorController.index);
+setor.get("/api/setor/sala", setorController.setorSala);
 setor.get("/api/setor/:_id", setorController.getSetorById);
-setor.put("/api/setor/:_id", setorController.update);
-setor.post("/api/setor", setorController.store);
-setor.delete("/api/setor/:_id", setorController.delete);
+
+// Rotas protegidas
+setor.get("/api/setor", verifyToken, check, setorController.index);
+setor.post("/api/setor", verifyToken, check, setorController.store);
+setor.put("/api/setor/:_id", verifyToken, check, setorController.update);
+setor.delete("/api/setor/:_id", verifyToken, check, setorController.delete);
 
 module.exports = setor;

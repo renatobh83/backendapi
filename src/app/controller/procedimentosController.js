@@ -10,7 +10,6 @@ class ProcedimentosController {
   async index(req, res) {
     try {
       const procedimentos = await Procedimentos.find({}, {});
-
       res.send(defaultResponse(procedimentos));
     } catch (error) {
       res.send(erroResponse(error.message));

@@ -5,7 +5,16 @@ class GrupoController {
   //list all group
   async index(req, res) {
     try {
-      const grupos = await Grupos.find();
+      const grupos = await Grupos.find({});
+      res.send(defaultResponse(grupos));
+    } catch (error) {
+      res.send(erroResponse(error));
+    }
+  }
+  async gruposUsers(req, res) {
+    try {
+      const grupos = await Grupos.find({});
+
       res.send(defaultResponse(grupos));
     } catch (error) {
       res.send(erroResponse(error));
@@ -31,7 +40,6 @@ class GrupoController {
   // novo grupo
   async store(req, res) {
     const { nome } = req.body;
-
     try {
       if (nome) {
         const grupoExist = await Grupos.findOne({ nome: nome });

@@ -24,7 +24,14 @@ class PlanosController {
       res.send(erroResponse(err.message));
     }
   }
-
+  async planoAgendamento(req, res) {
+    try {
+      const planos = await Planos.find({ ativo: true });
+      res.send(defaultResponse(planos));
+    } catch (err) {
+      res.send(erroResponse(err.message));
+    }
+  }
   async update(req, res) {
     try {
       await Planos.updateOne(req.params, { $set: req.body });
