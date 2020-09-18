@@ -21,13 +21,13 @@ horarios.put(
 horarios.post(
   "/api/horarios/delete",
   verifyToken,
-  check,
+  // check,
   horariosController.delelePeriodo
 );
 horarios.post(
   "/api/horarios/",
   verifyToken,
-  check,
+  // check,
   horariosController.createHours
 );
 

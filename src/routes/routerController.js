@@ -9,6 +9,7 @@ const procedimentos = require("./procedimentos");
 const dadosAgendamento = require("./dadosAgendamento");
 const planos = require("./planos");
 const tabelas = require("./tabelas");
+const relatorios = require("./relatorios");
 
 const routeController = (app) => {
   app.use(index);
@@ -22,6 +23,7 @@ const routeController = (app) => {
   app.use(dadosAgendamento);
   app.use(planos);
   app.use(tabelas);
+  app.use(relatorios);
 };
 
 module.exports = routeController;

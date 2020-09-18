@@ -6,7 +6,7 @@ class PermissaoController {
   //list all permission
   async index(req, res) {
     try {
-      const permissoes = await Permissao.find();
+      const permissoes = await Permissao.find({}, { _id: 1, nome: 1 });
       res.send(defaultResponse(permissoes));
     } catch (error) {
       res.send(erroResponse(error));
