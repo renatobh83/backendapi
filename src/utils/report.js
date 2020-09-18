@@ -155,14 +155,14 @@ module.exports = {
         totalagandadodia(),
         taxaOcupacao(),
       ]);
-      let result = {};
-      result.AgendadosMes = totalAgendaMes;
-      result.HorariosMes = horarioMes;
-      result.AgendamentoFuncinarios = agendadoMesAgent;
-      result.AgendamentoDia = agendadoDia;
-      result.TaxaOcupacao = txOcupacao;
+      let report = {};
+      report.AgendadosMes = totalAgendaMes;
+      report.HorariosMes = horarioMes;
+      report.AgendamentoFuncinarios = agendadoMesAgent;
+      report.AgendamentoDia = agendadoDia;
+      report.TaxaOcupacao = txOcupacao;
 
-      return result;
+      return report;
     } catch (error) {
       return error;
     }

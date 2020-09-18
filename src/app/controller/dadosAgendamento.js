@@ -5,8 +5,13 @@ const ObjectId = mongoose.Types.ObjectId;
 
 class DadosAgendamentoController {
   async store(req, res) {
-    await DadosAgendamento.create(req.body);
-    res.send(defaultResponse("Agendamento Concluido"));
+    try {
+      await DadosAgendamento.create(req.body);
+      res.send(defaultResponse("Agendamento Concluido"));
+    } catch (error) {
+      console.log(error.message);
+      res.send(erroResponse(error.message));
+    }
   }
 
   async findAgendamentoByPaciente(req, res) {

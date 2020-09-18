@@ -1,22 +1,31 @@
 const mongoose = require("../../database/database");
 const Sala = require("./Salas");
-const SetorSchema = new mongoose.Schema({
-  nome: {
-    type: String,
-    required: true,
-    uppercase: true,
-    unique: true,
-    trim: true,
+const SetorSchema = new mongoose.Schema(
+  {
+    nome: {
+      type: String,
+      required: true,
+      uppercase: true,
+      unique: true,
+      trim: true,
+    },
+    time: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now() - 3 * 60 * 60 * 1000,
+    },
   },
-  time: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now() - 3 * 60 * 60 * 1000,
-  },
-});
+  {
+    writeConcern: {
+      w: "majority",
+      j: true,
+      wtimeout: 1000,
+    },
+  }
+);
 
 SetorSchema.pre("deleteOne", function (next) {
   const self = this;
