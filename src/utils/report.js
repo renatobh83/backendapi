@@ -1,6 +1,7 @@
 const { startOfMonth } = require("date-fns");
 const DadosAgendamento = require("../app/models/DadosAgendamento");
 const Horarios = require("../app/models/Horarios");
+const User = require("../app/models/Users");
 
 const firstDayMonth = (date) => {
   return startOfMonth(date);
@@ -95,8 +96,8 @@ module.exports = {
         const dataInicio = new Date();
         const dataFim = new Date();
         dataInicio.setHours(0);
+
         const response = DadosAgendamento.aggregate([
-          // { $match: req.params },
           { $unwind: "$dados" },
           {
             $addFields: {
@@ -115,9 +116,15 @@ module.exports = {
             },
           },
           { $match: { data: { $gt: dataInicio, $lt: dataFim } } },
+
           { $group: { _id: "$agent", count: { $sum: 1 } } },
         ]);
         return response;
+      };
+      const AgendmentoDiaPaciente = async () => {
+        const pacientes = User.find({});
+
+        console.log(pacientes);
       };
       const taxaOcupacao = async () => {
         let horarios = 0;
@@ -139,7 +146,6 @@ module.exports = {
         } else {
           tx = 0;
         }
-
         return `${tx.toFixed(2)}%`;
       };
       const [
@@ -148,12 +154,14 @@ module.exports = {
         agendadoMesAgent,
         agendadoDia,
         txOcupacao,
+        teste,
       ] = await Promise.all([
         totalAgendadosMes(),
         totalHorarioMes(),
         totalAgendadosMesFuncionario(),
         totalagandadodia(),
         taxaOcupacao(),
+        AgendmentoDiaPaciente(),
       ]);
       let result = {};
       result.AgendadosMes = totalAgendaMes;
@@ -161,7 +169,7 @@ module.exports = {
       result.AgendamentoFuncinarios = agendadoMesAgent;
       result.AgendamentoDia = agendadoDia;
       result.TaxaOcupacao = txOcupacao;
-
+      result.
       return result;
     } catch (error) {
       return error;
