@@ -10,6 +10,7 @@ const ObjectId = mongoose.Types.ObjectId;
 class HorarioController {
   //Get all
   async getAllHorary(req, res) {
+    console.log(req);
     try {
       const response = await Horarios.find({});
       res.send(defaultResponse(response));
@@ -59,7 +60,6 @@ class HorarioController {
   }
   async horarioInativo(req, res) {
     const { id } = req.body;
-
     try {
       await Horarios.findOneAndUpdate(
         { "periodo.id": id },
@@ -78,7 +78,7 @@ class HorarioController {
     try {
       const horarios = await Horarios.aggregate([
         {
-          $match: { setorId: ObjectId(setor) },
+          $match: { setor: ObjectId(setor) },
         },
         { $unwind: "$periodo" },
         {
@@ -137,7 +137,7 @@ class HorarioController {
     }
     try {
       const horarios = await Horarios.aggregate([
-        { $match: { setorId: ObjectId(setor) } },
+        { $match: { setor: ObjectId(setor) } },
         { $unwind: "$periodo" },
         {
           $addFields: {
@@ -205,7 +205,7 @@ class HorarioController {
       t1,
       t2,
       idSala,
-      setorId,
+      setor,
     } = req.body;
     const startDate = dataInicio;
     const endDate = dataFim;
@@ -224,11 +224,12 @@ class HorarioController {
       return res.send(erroResponse("Nenhum periodo gerado"));
     }
     try {
-      await Horarios.create({
+      const a = await Horarios.create({
         salaId: idSala,
         periodo: horas,
-        setorId,
+        setor,
       });
+
       res.send(defaultResponse("Horarios Gerados", httpStatus.CREATED));
     } catch (error) {
       res.send(erroResponse(error.message));

@@ -118,7 +118,7 @@ class UsersController {
   //Update patient/users
   async updateUser(req, res) {
     const { name, password, telefone, dtNascimento, email } = req.body;
-    console.log(req.body);
+
     try {
       const update = await User.findOne(req.params);
 

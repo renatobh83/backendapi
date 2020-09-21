@@ -31,7 +31,7 @@ SetorSchema.pre("deleteOne", function (next) {
   const self = this;
   const id = self._conditions._id;
 
-  Sala.findOne({ setorId: id }).then((response) => {
+  Sala.findOne({ setor: id }).then((response) => {
     if (response)
       return next(
         Error(

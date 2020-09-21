@@ -52,11 +52,11 @@ class SalasController {
     }
   }
   async getSalaBySetor(req, res) {
-    const { setorId } = req.params;
+    const { setor } = req.params;
 
     try {
       const salas = await Sala.find(
-        { setorId: ObjectId(setorId) },
+        { setor: ObjectId(setor) },
         { createdAt: 0, __v: 0 }
       );
       res.send(defaultResponse(salas));

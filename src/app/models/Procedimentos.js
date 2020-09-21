@@ -11,7 +11,7 @@ const procedimentoSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    setorId: {
+    setor: {
       type: Schema.Types.ObjectId,
       ref: "Setor",
       required: true,

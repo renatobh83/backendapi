@@ -12,7 +12,7 @@ const HorariosSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: "Sala",
     },
-    setorId: {
+    setor: {
       type: Schema.Types.ObjectId,
       ref: "Setor",
     },

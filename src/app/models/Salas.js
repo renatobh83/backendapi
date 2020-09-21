@@ -1,6 +1,6 @@
 const mongoose = require("../../database/database");
 const { Schema } = require("../../database/database");
-const Horarios = require("./Horarios");
+
 const SalaSchema = new mongoose.Schema(
   {
     nome: {
@@ -9,7 +9,7 @@ const SalaSchema = new mongoose.Schema(
       uppercase: true,
       trim: true,
     },
-    setorId: {
+    setor: {
       type: Schema.Types.ObjectId,
       ref: "Setor",
       required: true,

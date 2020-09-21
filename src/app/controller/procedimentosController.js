@@ -18,7 +18,7 @@ class ProcedimentosController {
   async indexAgendamento(req, res) {
     try {
       const procedimentos = await Procedimentos.find({ ativo: true }, {}).sort({
-        setorId: 1,
+        setor: 1,
       });
 
       res.send(defaultResponse(procedimentos));
@@ -32,7 +32,7 @@ class ProcedimentosController {
     try {
       const procedimentoSetor = await Procedimentos.find(
         {
-          setorId: req.params,
+          setor: req.params,
         },
         { procedimento: 1 }
       );

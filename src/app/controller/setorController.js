@@ -1,4 +1,4 @@
-const Setor = require("./../models/Setor");
+const Setor = require("./../models/Setors");
 const { defaultResponse, erroResponse } = require("./../response");
 const httpStatus = require("http-status");
 
