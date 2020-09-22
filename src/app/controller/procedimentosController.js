@@ -65,7 +65,7 @@ class ProcedimentosController {
         return res.send(erroResponse("Procedimento ja cadastrado"));
 
       const newProc = await Procedimentos.create(req.body);
-
+      console.log(newProc);
       res.send(defaultResponse(newProc));
     } catch (error) {
       res.send(erroResponse(error.message));
@@ -74,7 +74,7 @@ class ProcedimentosController {
   async delete(req, res) {
     try {
       await Procedimentos.deleteOne(req.params);
-      res.send(defaultResponse("Procedimento apagad", httpStatus.NO_CONTENT));
+      res.send(defaultResponse("Procedimento apagado", httpStatus.NO_CONTENT));
     } catch (error) {
       res.send(erroResponse(error.message));
     }

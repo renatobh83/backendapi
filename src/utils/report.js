@@ -99,6 +99,7 @@ module.exports = {
       };
 
       const totalHorarioMes = async () => {
+        const fimMes = endDayMonth(dataAtual);
         const response = await Horarios.aggregate([
           { $unwind: "$periodo" },
 
@@ -125,15 +126,29 @@ module.exports = {
               },
             },
           },
-          { $match: { data: { $gte: inicioMes, $lte: dataAtual } } },
+          { $match: { data: { $gte: inicioMes, $lte: fimMes } } },
           { $group: { _id: "$setor", count: { $sum: 1 } } },
           { $project: { "_id.nome": 1, count: 1 } },
         ]);
 
         return response;
       };
+      const totalSetor = async () => {
+        const totalHorarios = await totalHorarioMes();
+        const totalAgendamento = await totalAgendadosMes();
+        let horarioSetor = [];
+        totalHorarios.forEach((nome) => {
+          totalAgendamento.forEach((horario) => {
+            if (horario._id.nome === nome._id.nome) {
+              horarioSetor.push([horario._id.nome, nome.count, horario.count]);
+            }
+          });
+        });
+        return horarioSetor;
+      };
 
       const totalAgendadosMesFuncionario = () => {
+        const fimMes = endDayMonth(dataAtual);
         const response = DadosAgendamento.aggregate([
           { $unwind: "$dados" },
           {
@@ -152,7 +167,7 @@ module.exports = {
               },
             },
           },
-          { $match: { data: { $gte: inicioMes, $lte: dataAtual } } },
+          { $match: { data: { $gte: inicioMes, $lte: fimMes } } },
           { $group: { _id: "$agent", count: { $sum: 1 } } },
         ]);
 
@@ -218,6 +233,7 @@ module.exports = {
         agendadoDia,
         txOcupacao,
         exames,
+        totalsetor,
       ] = await Promise.all([
         totalAgendadosMes(),
         totalHorarioMes(),
@@ -225,6 +241,7 @@ module.exports = {
         totalagandadodia(),
         taxaOcupacao(),
         examesAgendado(),
+        totalSetor(),
       ]);
       let report = {};
       report.AgendadosMes = totalAgendaMes;
@@ -233,7 +250,7 @@ module.exports = {
       report.AgendamentoDia = agendadoDia;
       report.ExamesAgendado = exames;
       report.TaxaOcupacao = txOcupacao;
-
+      report.TaxaHorarioAgendamento = totalsetor;
       return report;
     } catch (error) {
       return error;
