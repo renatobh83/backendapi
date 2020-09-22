@@ -140,7 +140,12 @@ module.exports = {
         totalHorarios.forEach((nome) => {
           totalAgendamento.forEach((horario) => {
             if (horario._id.nome === nome._id.nome) {
-              horarioSetor.push([horario._id.nome, nome.count, horario.count]);
+              horarioSetor.push([
+                horario._id.nome,
+                nome.count,
+                horario.count,
+                horario.count,
+              ]);
             }
           });
         });
