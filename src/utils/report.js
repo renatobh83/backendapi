@@ -172,16 +172,49 @@ module.exports = {
               },
             },
           },
-          { $match: { data: { $gte: inicioMes, $lte: fimMes } } },
+          { $match: { createdAt: { $gte: inicioMes, $lte: fimMes } } },
           { $group: { _id: "$agent", count: { $sum: 1 } } },
         ]);
 
         return response;
       };
+      const totalMesFunDay = () => {
+        const fimMes = endDayMonth(dataAtual);
+        const response = DadosAgendamento.aggregate([
+          { $unwind: "$dados" },
+          {
+            $addFields: {
+              data: {
+                $dateFromString: {
+                  dateString: {
+                    $concat: [
+                      "$dados.hora.data",
+                      "T",
+                      "$dados.hora.horaInicio",
+                    ],
+                  },
+                  format: "%d/%m/%YT%H:%M",
+                },
+              },
+              agendadoem: { $substr: ["$createdAt", 0, 10] },
+            },
+          },
+          { $match: { createdAt: { $gte: inicioMes, $lte: fimMes } } },
+          { $sort: { createdAt: 1 } },
+          {
+            $group: {
+              _id: { ag: "$agent", dt: "$agendadoem" },
+              count: { $sum: 1 },
+            },
+          },
+        ]);
 
+        return response;
+      };
       const totalagandadodia = () => {
         const dataInicio = new Date();
         const dataFim = new Date();
+
         dataInicio.setHours(0);
         const response = DadosAgendamento.aggregate([
           // { $match: req.params },
@@ -239,6 +272,7 @@ module.exports = {
         txOcupacao,
         exames,
         totalsetor,
+        agendamentoDayFun,
       ] = await Promise.all([
         totalAgendadosMes(),
         totalHorarioMes(),
@@ -247,6 +281,7 @@ module.exports = {
         taxaOcupacao(),
         examesAgendado(),
         totalSetor(),
+        totalMesFunDay(),
       ]);
       let report = {};
       report.AgendadosMes = totalAgendaMes;
@@ -256,6 +291,7 @@ module.exports = {
       report.ExamesAgendado = exames;
       report.TaxaOcupacao = txOcupacao;
       report.TaxaHorarioAgendamento = totalsetor;
+      report.AgendamentoMesFuncionario = agendamentoDayFun;
       return report;
     } catch (error) {
       return error;

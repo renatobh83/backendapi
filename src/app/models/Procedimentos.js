@@ -63,7 +63,7 @@ procedimentoSchema.pre("deleteOne", function (next) {
     if (res)
       return next(
         Error(
-          "Exame não pode ser excluído pois já este associado a uma tabela de procedimento, por favor remova da tabela para ser excluído"
+          "Exame não pode ser excluído pois já esta associado a uma tabela de procedimento, por favor remova da tabela para ser excluído"
         )
       );
     next();

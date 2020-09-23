@@ -10,7 +10,6 @@ const ObjectId = mongoose.Types.ObjectId;
 class HorarioController {
   //Get all
   async getAllHorary(req, res) {
-    console.log(req);
     try {
       const response = await Horarios.find({});
       res.send(defaultResponse(response));

@@ -65,7 +65,7 @@ class ProcedimentosController {
         return res.send(erroResponse("Procedimento ja cadastrado"));
 
       const newProc = await Procedimentos.create(req.body);
-      console.log(newProc);
+
       res.send(defaultResponse(newProc));
     } catch (error) {
       res.send(erroResponse(error.message));

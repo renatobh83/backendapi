@@ -1,7 +1,5 @@
-const { startOfMonth } = require("date-fns/");
 const report = require("../../utils/report");
-const DadosAgendamento = require("../models/DadosAgendamento");
-const Horarios = require("../models/Horarios");
+
 const { defaultResponse, erroResponse } = require("../response");
 
 class RelatoriosController {
