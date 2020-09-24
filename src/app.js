@@ -19,8 +19,7 @@ class AppController {
         origin: [
           "http://192.168.1.226:3000",
           "http://localhost:3000",
-          "http://192.168.1.32:3000",
-          "https://healtcare.herokuapp.com",
+          "https://cepam.herokuapp.com",
         ],
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         credentials: true,
