@@ -13,7 +13,7 @@ horarios.get(
 horarios.get(
   "/api/horario/:sala",
   verifyToken,
-  check,
+
   horariosController.getAllHoraryBySala
 );
 horarios.get(
