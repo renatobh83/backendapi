@@ -10,7 +10,7 @@ class UsersController {
     try {
       const pacientes = await User.find({
         $and: [{ ativo: true }, { paciente: true }],
-      }).limit(50);
+      }).limit(20);
       res.send(defaultResponse(pacientes));
     } catch (error) {
       res.send(erroResponse(error.message));

@@ -1,6 +1,6 @@
 const usersController = require("../app/controller/usersController");
 const verifyToken = require("../middlewares/checkToken");
-const { eAdmin } = require("../middlewares/eAdmin");
+const { isUser } = require("../middlewares/isUser");
 const { check } = require("../middlewares/checkPermission");
 
 const indexController = require("../app/controller/indexController");
@@ -9,8 +9,13 @@ const users = require("express").Router();
 
 users.get("/api/ping", indexController.ping);
 // pegar pacientes
-users.get("/api/pacientes", verifyToken, usersController.indexPacientes);
+users.get(
+  "/api/pacientes",
+  verifyToken,
 
+  usersController.indexPacientes
+);
+users.get("/api/checkPermissao", verifyToken, isUser, indexController.ping);
 // listar  todos usuario
 users.get("/api/usuarios", verifyToken, check, usersController.indexUsers);
 
