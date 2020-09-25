@@ -18,4 +18,6 @@ dadosAgendamento.delete(
   dadosControler.cancelAgendamento
 );
 
+dadosAgendamento.get("/api/da/sala/:sala", dadosControler.getAgendamentos);
+
 module.exports = dadosAgendamento;

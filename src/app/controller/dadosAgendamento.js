@@ -55,6 +55,15 @@ class DadosAgendamentoController {
     const respons = await DadosAgendamento.deleteOne({ "dados.hora.id": id });
     res.send(defaultResponse("cancelado"));
   }
+  async getAgendamentos(req, res) {
+    console.log(req.params);
+    const response = await DadosAgendamento.aggregate([
+      { $unwind: "$dados" },
+      { $match: { "dados.exame.exame.setor": "5f68c0c6607b990017f44819" } },
+    ]);
+    console.log(response);
+    res.send(defaultResponse(response));
+  }
 }
 
 module.exports = new DadosAgendamentoController();

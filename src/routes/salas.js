@@ -7,7 +7,7 @@ salas.get("/api/salas/horarios", verifyToken, salasController.salasHorarios);
 salas.get("/api/salas/:salaId", verifyToken, salasController.getSalaById);
 salas.get("/api/sala/:setor", verifyToken, salasController.getSalaBySetor);
 //Rotas Protogidas
-salas.get("/api/salas/", verifyToken, check, salasController.getAllRoom);
+salas.get("/api/salas/", salasController.getAllRoom);
 salas.delete(
   "/api/salas/:salaId",
   verifyToken,

@@ -82,7 +82,7 @@ class UsersController {
             user: userExist,
             permissoes: response.permissaoId,
           };
-
+          userExist.name = dataCreate.name;
           return res.send(defaultResponse(userPermissoes));
         }
         return res.send(defaultResponse(userExist));
@@ -98,6 +98,7 @@ class UsersController {
   async createOrUpdate(req, res) {
     const { email, group } = req.body;
     const dataCreate = req.body;
+
     try {
       const userExist = await User.findOne({ email: email });
       if (userExist) {
